@@ -11,7 +11,7 @@ class ArticleEntity extends Equatable {
   final DateTime? publishedAt;
   final String? content;
 
-  ArticleEntity({
+  const ArticleEntity({
     this.source,
     this.author,
     this.title,
@@ -47,5 +47,14 @@ class ArticleEntity extends Equatable {
       };
 
   @override
-  List<Object?> get props => [author, title];
+  List<Object?> get props => [
+        author,
+        title,
+        description,
+        content,
+        publishedAt,
+        url,
+        urlToImage,
+        source
+      ];
 }

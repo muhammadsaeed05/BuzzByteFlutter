@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
 import 'package:news_app/domain/entities/article_entity.dart';
 
 NewsResponseModel newsResponseModelFromJson(Map<String, dynamic> json) =>
@@ -8,12 +9,12 @@ NewsResponseModel newsResponseModelFromJson(Map<String, dynamic> json) =>
 String newsResponseModelToJson(NewsResponseModel data) =>
     json.encode(data.toJson());
 
-class NewsResponseModel {
+class NewsResponseModel extends Equatable {
   final String? status;
   final int? totalResults;
   final List<Article>? articles;
 
-  NewsResponseModel({
+  const NewsResponseModel({
     this.status,
     this.totalResults,
     this.articles,
@@ -36,6 +37,9 @@ class NewsResponseModel {
             ? []
             : List<dynamic>.from(articles!.map((x) => x.toJson())),
       };
+
+  @override
+  List<Object?> get props => [status, totalResults, articles];
 }
 
 class Article extends ArticleEntity {
@@ -48,7 +52,7 @@ class Article extends ArticleEntity {
   final DateTime? publishedAt;
   final String? content;
 
-  Article({
+  const Article({
     this.source,
     this.author,
     this.title,
@@ -91,13 +95,25 @@ class Article extends ArticleEntity {
         "publishedAt": publishedAt?.toIso8601String(),
         "content": content,
       };
+
+  ArticleEntity toEntity() {
+    return ArticleEntity(
+        author: author,
+        content: content,
+        description: description,
+        publishedAt: publishedAt,
+        source: source,
+        title: title,
+        url: url,
+        urlToImage: urlToImage);
+  }
 }
 
-class Source {
+class Source extends Equatable {
   final Id? id;
   final String? name;
 
-  Source({
+  const Source({
     this.id,
     this.name,
   });
@@ -111,6 +127,9 @@ class Source {
         "id": idValues.reverse[id],
         "name": name,
       };
+
+  @override
+  List<Object?> get props => [id, name];
 }
 
 enum Id {

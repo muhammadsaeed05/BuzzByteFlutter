@@ -1,0 +1,17 @@
+{
+    "status": "ok",
+    "totalResults": 9238,
+    "articles": [ 
+        {
+            "source": {
+            "id": "the-verge",
+            "name": "The Verge"
+            },
+            "author": "Me",
+            "title": "Hello",
+            "description": "Hello world",
+            "url": "www.hello.com",
+            "content": "Hello"
+            }
+    ]
+}

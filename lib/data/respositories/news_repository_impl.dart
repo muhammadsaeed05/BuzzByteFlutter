@@ -19,8 +19,8 @@ class NewsRepositoryImpl extends NewsRepository {
       if (articles.isEmpty) {
         return const Left(AppError(AppErrorType.api));
       }
-      print(articles);
-      return Right(articles);
+
+      return Right(articles.map((e) => e.toEntity()).toList());
     } on SocketException {
       return const Left(AppError(AppErrorType.network));
     } on Exception {

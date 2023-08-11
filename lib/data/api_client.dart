@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:news_app/common/constants/endpoints.dart';
 
@@ -8,11 +7,12 @@ class ApiClient {
   ApiClient(this._client);
 
   dynamic get(String path, {Map<dynamic, dynamic>? params}) async {
-    print(getPath(path, params));
     final response = await _client.get(getPath(path, params));
 
     if (response.statusCode == 200) {
       return response.data;
+    } else {
+      throw Exception('Failed to load data');
     }
   }
 
