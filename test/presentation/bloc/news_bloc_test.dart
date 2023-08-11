@@ -49,7 +49,7 @@ void main() {
     'emits [NewsLoading, NewsError] when LoadNewsEvent is added.',
     build: () {
       when(mockGetEverythingUseCase())
-          .thenAnswer((_) async => Left(const AppError(AppErrorType.api)));
+          .thenAnswer((_) async => const Left(AppError(AppErrorType.api)));
       return newsBloc;
     },
     act: (bloc) => bloc.add(LoadNewsEvent()),
