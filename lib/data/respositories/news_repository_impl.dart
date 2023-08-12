@@ -27,4 +27,22 @@ class NewsRepositoryImpl extends NewsRepository {
       return const Left(AppError(AppErrorType.api));
     }
   }
+
+  @override
+  Future<Either<AppError, List<ArticleEntity>>> getTopHeadlines(
+      String category) async {
+    try {
+      final articles = await _newsRemoteDatasource.getTopHeadlines(category);
+
+      if (articles.isEmpty) {
+        return const Left(AppError(AppErrorType.api));
+      }
+
+      return Right(articles.map((e) => e.toEntity()).toList());
+    } on SocketException {
+      return const Left(AppError(AppErrorType.network));
+    } on Exception {
+      return const Left(AppError(AppErrorType.api));
+    }
+  }
 }

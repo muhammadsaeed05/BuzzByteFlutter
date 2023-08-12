@@ -5,6 +5,7 @@ import 'package:news_app/data/datasources/remote/news_remote_datasource.dart';
 import 'package:news_app/data/respositories/news_repository_impl.dart';
 import 'package:news_app/domain/repositories/news_repository.dart';
 import 'package:news_app/domain/usecases/get_everything_news.dart';
+import 'package:news_app/domain/usecases/get_top_headlines.dart';
 import 'package:news_app/presentation/blocs/bloc/news_bloc.dart';
 
 final getItInstance = GetIt.instance;
@@ -23,6 +24,9 @@ Future init() async {
 
   getItInstance.registerLazySingleton<GetEverythingUseCase>(
       () => GetEverythingUseCase(getItInstance()));
+
+  getItInstance.registerLazySingleton<GetTopHeadlinesUsecase>(
+      () => GetTopHeadlinesUsecase(getItInstance()));
 
   getItInstance.registerFactory<NewsBloc>(() => NewsBloc(getItInstance()));
 }

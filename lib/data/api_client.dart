@@ -23,6 +23,6 @@ class ApiClient {
         paramsString += '&$key=$value';
       });
     }
-    return '${APIEnpoints.baseUrl}$path?q=bitcoin&apiKey=${APIEnpoints.apiKey}$paramsString';
+    return '${APIEnpoints.baseUrl}$path?apiKey=${APIEnpoints.apiKey}$paramsString';
   }
 }
