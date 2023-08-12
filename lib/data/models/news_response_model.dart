@@ -99,7 +99,7 @@ class Article extends ArticleEntity {
   ArticleEntity toEntity() {
     return ArticleEntity(
         author: author,
-        content: content,
+        content: content?.replaceAll(RegExp(r'\[\+\d+ chars\]'), ''),
         description: description,
         publishedAt: publishedAt,
         source: source,
