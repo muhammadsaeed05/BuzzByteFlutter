@@ -33,7 +33,6 @@ class NewsRepositoryImpl extends NewsRepository {
       String category) async {
     try {
       final articles = await _newsRemoteDatasource.getTopHeadlines(category);
-
       if (articles.isEmpty) {
         return const Left(AppError(AppErrorType.api));
       }

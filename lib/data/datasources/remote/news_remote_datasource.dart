@@ -23,7 +23,7 @@ class NewsRemoteDatasourceImpl extends NewsRemoteDatasource {
 
   @override
   Future<List<Article>> getTopHeadlines(String category) async {
-    Map<String, String> params = {'category': category};
+    Map<String, String> params = {'category': category, 'country': 'us'};
 
     final response = await _client.get('top-headlines', params: params);
     NewsResponseModel newsResponseModel = NewsResponseModel.fromJson(response);

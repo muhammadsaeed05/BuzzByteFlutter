@@ -8,9 +8,3 @@ sealed class NewsEvent extends Equatable {
 }
 
 class LoadNewsEvent extends NewsEvent {}
-
-class LoadTopHeadlineNewsEvent extends NewsEvent {
-  final String category;
-
-  const LoadTopHeadlineNewsEvent(this.category);
-}

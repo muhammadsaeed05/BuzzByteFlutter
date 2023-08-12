@@ -10,24 +10,15 @@ part 'news_state.dart';
 
 class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetEverythingUseCase _getEverythingUseCase;
-  final GetTopHeadlinesUsecase _getTopHeadlinesUsecase;
 
   NewsBloc(
     this._getEverythingUseCase,
-    this._getTopHeadlinesUsecase,
   ) : super(NewsInitial()) {
     on<LoadNewsEvent>((event, emit) async {
       emit(NewsLoading());
       final either = await _getEverythingUseCase();
       either.fold(
           (l) => emit(NewsError(l.appErrorType)), (r) => emit(NewsLoaded(r)));
-    });
-
-    on<LoadTopHeadlineNewsEvent>((event, emit) async {
-      emit(TopHeadlinesNewsLoading());
-      final either = await _getTopHeadlinesUsecase(event.category);
-      either.fold((l) => emit(NewsError(l.appErrorType)),
-          (r) => emit(TopHeadlinesNewsLoaded(r)));
     });
   }
 }

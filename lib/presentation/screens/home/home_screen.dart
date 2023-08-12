@@ -1,14 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:news_app/di/get_it.dart';
-import 'package:news_app/domain/entities/article_entity.dart';
-import 'package:news_app/presentation/blocs/bloc/news_bloc.dart';
+import 'package:news_app/presentation/blocs/headlines_news/headlines_news_bloc.dart';
+import 'package:news_app/presentation/blocs/news/news_bloc.dart';
 import 'package:news_app/presentation/screens/home/widgets/article_card.dart';
 import 'package:news_app/presentation/screens/home/widgets/article_row_item.dart';
-import 'package:news_app/presentation/theme/theme_color.dart';
+import 'package:news_app/presentation/screens/home/widgets/loading_article_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,12 +17,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late NewsBloc _newsBloc;
+  late HeadlinesNewsBloc _headlinesNewsBloc;
 
   @override
   void initState() {
     super.initState();
     _newsBloc = getItInstance();
     _newsBloc.add(LoadNewsEvent());
+
+    _headlinesNewsBloc = getItInstance();
+    _headlinesNewsBloc.add(LoadHeadlinesNewsEvent('technology'));
   }
 
   @override
@@ -35,78 +37,176 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(
-      bloc: _newsBloc,
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('NewsBuzz'),
-            forceMaterialTransparency: true,
-            centerTitle: true,
-          ),
-          body: _buildBody(state),
-        );
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(
+          value: _newsBloc,
+        ),
+        BlocProvider.value(
+          value: _headlinesNewsBloc,
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('NewsBuzz'),
+          forceMaterialTransparency: true,
+          centerTitle: true,
+        ),
+        body: _buildBody(context),
+      ),
     );
   }
 
-  Widget _buildBody(NewsState state) {
-    if (state is NewsLoading) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
-    } else if (state is NewsLoaded) {
-      final articles = state.articles;
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Headlines',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 250.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: articles.length,
-                  itemBuilder: (context, index) {
-                    var article = articles[index];
-                    return ArticleCard(article: article);
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
-              Text(
-                'Top News',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge!
-                    .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: articles.length,
-                itemBuilder: (context, index) {
-                  var article = articles[index];
-                  return ArticleRowItem(article: article);
-                },
-              )
-            ],
-          ),
+  // Widget _buildBody(NewsState state) {
+  //   if (state is NewsLoading) {
+  //     return const Center(
+  //       child: CircularProgressIndicator.adaptive(),
+  //     );
+  //   } else if (state is NewsLoaded) {
+  //     final articles = state.articles;
+  //     return Padding(
+  //       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+  //       child: SingleChildScrollView(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               'Headlines',
+  //               style: Theme.of(context)
+  //                   .textTheme
+  //                   .headlineLarge!
+  //                   .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+  //             ),
+  //             SizedBox(
+  //               height: 250.h,
+  //               child: ListView.builder(
+  //                 scrollDirection: Axis.horizontal,
+  //                 shrinkWrap: true,
+  //                 itemCount: articles.length,
+  //                 itemBuilder: (context, index) {
+  //                   var article = articles[index];
+  //                   return ArticleCard(article: article);
+  //                 },
+  //               ),
+  //             ),
+  //             SizedBox(
+  //               height: 16.h,
+  //             ),
+  //             Text(
+  //               'Top News',
+  //               style: Theme.of(context)
+  //                   .textTheme
+  //                   .headlineLarge!
+  //                   .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+  //             ),
+  //             ListView.builder(
+  //               physics: const NeverScrollableScrollPhysics(),
+  //               shrinkWrap: true,
+  //               itemCount: articles.length,
+  //               itemBuilder: (context, index) {
+  //                 var article = articles[index];
+  //                 return ArticleRowItem(article: article);
+  //               },
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     return const SizedBox.shrink();
+  //   }
+  // }
+
+  Widget _buildBody(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Headlines',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            BlocBuilder<HeadlinesNewsBloc, HeadlinesNewsState>(
+              builder: (context, state) {
+                if (state is HeadlinesNewsLoading) {
+                  return SizedBox(
+                    height: 250.h,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      children: const [
+                        LoadingArticleCard(),
+                        LoadingArticleCard(),
+                        LoadingArticleCard(),
+                      ],
+                    ),
+                  );
+                } else if (state is HeadlinesNewsLoaded) {
+                  var articles = state.articles;
+                  return SizedBox(
+                    height: 250.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: articles.length,
+                      itemBuilder: (context, index) {
+                        var article = articles[index];
+                        return ArticleCard(article: article);
+                      },
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
+            Text(
+              'Top News',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            BlocBuilder<NewsBloc, NewsState>(
+              builder: (context, state) {
+                if (state is LoadNewsEvent) {
+                  return ListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    children: const [
+                      LoadingArticleCard(),
+                      LoadingArticleCard(),
+                      LoadingArticleCard(),
+                    ],
+                  );
+                } else if (state is NewsLoaded) {
+                  var articles = state.articles;
+
+                  return ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: articles.length,
+                    itemBuilder: (context, index) {
+                      var article = articles[index];
+                      return ArticleRowItem(article: article);
+                    },
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
+            )
+          ],
         ),
-      );
-    } else {
-      return const SizedBox.shrink();
-    }
+      ),
+    );
   }
 }

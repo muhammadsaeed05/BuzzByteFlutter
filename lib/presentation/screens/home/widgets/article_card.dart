@@ -45,7 +45,28 @@ class ArticleCard extends StatelessWidget {
           ),
         );
       },
-      errorWidget: (context, url, error) => Placeholder(),
+      errorWidget: (context, url, error) => Container(
+        margin: EdgeInsets.only(
+          right: 8.w,
+        ),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.grey.withOpacity(0.4)),
+        width: 300.w,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(
+              article.title ?? '',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
