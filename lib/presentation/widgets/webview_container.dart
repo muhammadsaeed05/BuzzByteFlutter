@@ -43,7 +43,8 @@ class _WebViewContainerState extends State<WebViewContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        forceMaterialTransparency: true,
+        title: Text(Uri.parse(widget.url).host),
       ),
       body: WebViewWidget(controller: controller),
     );
