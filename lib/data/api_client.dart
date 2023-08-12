@@ -8,7 +8,7 @@ class ApiClient {
 
   dynamic get(String path, {Map<dynamic, dynamic>? params}) async {
     final response = await _client.get(getPath(path, params));
-
+    print(getPath(path, params));
     if (response.statusCode == 200) {
       return response.data;
     } else {
@@ -23,6 +23,6 @@ class ApiClient {
         paramsString += '&$key=$value';
       });
     }
-    return '${APIEnpoints.baseUrl}$path?apiKey=${APIEnpoints.apiKey}$paramsString';
+    return '${ApiEndpoints.baseUrl}$path?apiKey=${ApiEndpoints.apiKey}$paramsString';
   }
 }

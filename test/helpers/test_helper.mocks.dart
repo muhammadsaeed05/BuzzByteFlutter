@@ -119,6 +119,23 @@ class MockNewsRepository extends _i1.Mock implements _i8.NewsRepository {
               ),
             )),
           ) as _i9.Future<_i2.Either<_i10.AppError, List<_i11.ArticleEntity>>>);
+  @override
+  _i9.Future<_i2.Either<_i10.AppError, List<_i11.ArticleEntity>>>
+      getTopHeadlines(String? category) => (super.noSuchMethod(
+            Invocation.method(
+              #getTopHeadlines,
+              [category],
+            ),
+            returnValue: _i9.Future<
+                    _i2.Either<_i10.AppError, List<_i11.ArticleEntity>>>.value(
+                _FakeEither_0<_i10.AppError, List<_i11.ArticleEntity>>(
+              this,
+              Invocation.method(
+                #getTopHeadlines,
+                [category],
+              ),
+            )),
+          ) as _i9.Future<_i2.Either<_i10.AppError, List<_i11.ArticleEntity>>>);
 }
 
 /// A class which mocks [NewsRemoteDatasource].
@@ -135,6 +152,15 @@ class MockNewsRemoteDatasource extends _i1.Mock
         Invocation.method(
           #getEverythingNews,
           [],
+        ),
+        returnValue: _i9.Future<List<_i13.Article>>.value(<_i13.Article>[]),
+      ) as _i9.Future<List<_i13.Article>>);
+  @override
+  _i9.Future<List<_i13.Article>> getTopHeadlines(String? category) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getTopHeadlines,
+          [category],
         ),
         returnValue: _i9.Future<List<_i13.Article>>.value(<_i13.Article>[]),
       ) as _i9.Future<List<_i13.Article>>);

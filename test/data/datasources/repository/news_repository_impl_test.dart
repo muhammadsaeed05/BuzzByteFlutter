@@ -39,6 +39,8 @@ void main() {
     urlToImage: "www.hello.com/hello",
   );
 
+  String tCategory = 'technology';
+
   group('get everyday news', () {
     test('should return news when a call to datasource is successfull',
         () async {
@@ -62,6 +64,35 @@ void main() {
           const SocketException('Failed to connect to the newtwork'));
       // act
       final result = await newsRepositoryImpl.getEverythingNews();
+
+      // assert
+      expect(result, equals(const Left(AppError(AppErrorType.network))));
+    });
+  });
+
+  group('get top headlines news', () {
+    test('should return news when a call to datasource is successfull',
+        () async {
+      // arrange
+      when(mockNewsRemoteDatasource.getTopHeadlines(tCategory))
+          .thenAnswer((_) async => [testArticleModel]);
+      // act
+      final result = await newsRepositoryImpl.getTopHeadlines(tCategory);
+
+      final list1 = result.getOrElse(() => []);
+      final list2 = [testArticleEntity];
+
+      // assert
+      expect(list1, equals(list2));
+    });
+
+    test('should return connection failure when the device has no internet',
+        () async {
+      // arrange
+      when(mockNewsRemoteDatasource.getTopHeadlines(tCategory)).thenThrow(
+          const SocketException('Failed to connect to the newtwork'));
+      // act
+      final result = await newsRepositoryImpl.getTopHeadlines(tCategory);
 
       // assert
       expect(result, equals(const Left(AppError(AppErrorType.network))));
