@@ -7,6 +7,7 @@ import 'package:news_app/presentation/blocs/news/news_bloc.dart';
 import 'package:news_app/presentation/screens/home/widgets/article_card.dart';
 import 'package:news_app/presentation/screens/home/widgets/article_row_item.dart';
 import 'package:news_app/presentation/screens/home/widgets/loading_article_card.dart';
+import 'package:news_app/presentation/screens/home/widgets/loading_article_row_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _newsBloc.add(LoadNewsEvent());
 
     _headlinesNewsBloc = getItInstance();
-    _headlinesNewsBloc.add(LoadHeadlinesNewsEvent('technology'));
+    _headlinesNewsBloc.add(const LoadHeadlinesNewsEvent('technology'));
   }
 
   @override
@@ -137,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SizedBox(
                     height: 250.h,
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       children: const [
@@ -151,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return SizedBox(
                     height: 250.h,
                     child: ListView.builder(
+                      padding: EdgeInsets.only(top: 8.h),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemCount: articles.length,
@@ -177,14 +180,16 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BlocBuilder<NewsBloc, NewsState>(
               builder: (context, state) {
-                if (state is LoadNewsEvent) {
+                if (state is NewsLoading) {
+                  print('Heeeee');
                   return ListView(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     children: const [
-                      LoadingArticleCard(),
-                      LoadingArticleCard(),
-                      LoadingArticleCard(),
+                      LoadingArticleRowItem(),
+                      LoadingArticleRowItem(),
+                      LoadingArticleRowItem(),
+                      LoadingArticleRowItem(),
                     ],
                   );
                 } else if (state is NewsLoaded) {
@@ -200,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   );
                 } else {
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 }
               },
             )

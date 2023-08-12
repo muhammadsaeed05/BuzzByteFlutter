@@ -20,6 +20,8 @@ dependencies:
   flutter_screenutil: ^5.8.4
   get_it: ^7.6.0
   google_fonts: ^5.1.0
+  skeletons: ^0.0.3
+  webview_flutter: ^4.2.2
 
 dev_dependencies:
   bloc_test: ^9.1.4
