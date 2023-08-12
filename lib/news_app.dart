@@ -17,7 +17,7 @@ class NewsApp extends StatelessWidget {
         builder: (context, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'NewsBuzz',
+            title: 'BuzzByte',
             theme: ThemeData(
               textTheme: ThemeText.getTextTheme(),
               colorScheme: ThemeColor.lightColorScheme,

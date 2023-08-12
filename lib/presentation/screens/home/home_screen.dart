@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('NewsBuzz'),
+          title: const Text('BuzzByte'),
           forceMaterialTransparency: true,
           centerTitle: true,
         ),
