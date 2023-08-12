@@ -11,6 +11,7 @@ import '../../helpers/test_helper.mocks.dart';
 
 void main() {
   late MockGetEverythingUseCase mockGetEverythingUseCase;
+  late MockGetTopHeadlinesUsecase mockGetTopHeadlinesUsecase;
   late NewsBloc newsBloc;
 
   var testArticlesEntity = [
@@ -25,9 +26,13 @@ void main() {
         urlToImage: "www.hello.com")
   ];
 
+  String tCategory = 'technology';
+
   setUp(() {
     mockGetEverythingUseCase = MockGetEverythingUseCase();
-    newsBloc = NewsBloc(mockGetEverythingUseCase);
+    mockGetTopHeadlinesUsecase = MockGetTopHeadlinesUsecase();
+
+    newsBloc = NewsBloc(mockGetEverythingUseCase, mockGetTopHeadlinesUsecase);
   });
 
   test('initial state should be empty', () {
@@ -54,5 +59,29 @@ void main() {
     },
     act: (bloc) => bloc.add(LoadNewsEvent()),
     expect: () => [NewsLoading(), const NewsError(AppErrorType.api)],
+  );
+
+  blocTest<NewsBloc, NewsState>(
+    'emits [TopHeadlinesNewsLoading, TopHeadlinesNewsLoaded] when LoadTopHeadlinesNewsEvent is added.',
+    build: () {
+      when(mockGetTopHeadlinesUsecase(tCategory))
+          .thenAnswer((_) async => Right(testArticlesEntity));
+      return newsBloc;
+    },
+    act: (bloc) => bloc.add(LoadTopHeadlineNewsEvent(tCategory)),
+    expect: () =>
+        [TopHeadlinesNewsLoading(), TopHeadlinesNewsLoaded(testArticlesEntity)],
+  );
+
+  blocTest<NewsBloc, NewsState>(
+    'emits [TopHeadlinesNewsLoading, NewsError] when LoadTopHeadlinesNewsEvent is added.',
+    build: () {
+      when(mockGetTopHeadlinesUsecase(tCategory))
+          .thenAnswer((_) async => const Left(AppError(AppErrorType.api)));
+      return newsBloc;
+    },
+    act: (bloc) => bloc.add(LoadTopHeadlineNewsEvent(tCategory)),
+    expect: () =>
+        [TopHeadlinesNewsLoading(), const NewsError(AppErrorType.api)],
   );
 }

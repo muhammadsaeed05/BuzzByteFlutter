@@ -28,5 +28,8 @@ Future init() async {
   getItInstance.registerLazySingleton<GetTopHeadlinesUsecase>(
       () => GetTopHeadlinesUsecase(getItInstance()));
 
-  getItInstance.registerFactory<NewsBloc>(() => NewsBloc(getItInstance()));
+  getItInstance.registerFactory<NewsBloc>(() => NewsBloc(
+        getItInstance(),
+        getItInstance(),
+      ));
 }

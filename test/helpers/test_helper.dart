@@ -4,11 +4,13 @@ import 'package:news_app/data/datasources/remote/news_remote_datasource.dart';
 
 import 'package:news_app/domain/repositories/news_repository.dart';
 import 'package:news_app/domain/usecases/get_everything_news.dart';
+import 'package:news_app/domain/usecases/get_top_headlines.dart';
 
 @GenerateMocks([
   NewsRepository,
   NewsRemoteDatasource,
-  GetEverythingUseCase
+  GetEverythingUseCase,
+  GetTopHeadlinesUsecase,
 ], customMocks: [
   MockSpec<dio.Dio>(as: #MockDioClient),
 ])
