@@ -1,6 +1,6 @@
 # BuzzByte - Your Tech News Companion
 
-![App Logo](Screenshots/app-icon.png)
+<img src="Screenshots/app-icon.png" alt="app icon" width="50" height="50" />
 
 ## Overview
 
