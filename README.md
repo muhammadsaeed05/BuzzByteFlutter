@@ -1,6 +1,6 @@
 # BuzzByte - Your Tech News Companion
 
-![App Logo](Screenshots/app-logo.png)
+![App Logo](Screenshots/app-icon.png)
 
 ## Overview
 
